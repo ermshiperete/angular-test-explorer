@@ -4,8 +4,8 @@ import path = require("path");
 
 export class AngularRunner {
   private readonly karmaHelper: KarmaHelper;
-  private commandLine: any;
-  public constructor(private angularProjectRootPath: string, private baseKarmaConfigFilePath: string, private userKarmaConfigFilePath: string) {
+  // private commandLine: any;
+  public constructor(private angularProjectRootPath: string, private baseKarmaConfigFilePath: string/*, private userKarmaConfigFilePath: string*/) {
     explorerKarmaConfig.setGlobals({
       karmaConfig: { basePath: this.angularProjectRootPath },
     });
@@ -51,12 +51,20 @@ export class AngularRunner {
 
   private runNgTest(): void {
     const cliArgs = ["test", `--karma-config="${require.resolve(this.baseKarmaConfigFilePath)}"`];
-    const command = `ng ${cliArgs.join(" ")} >/dev/null`;
+	  // const command = `pwd && ng ${cliArgs.join(" ")} >/dev/null`;
+	  const command = `bash -i -c "nvm use && ng ${cliArgs.join(" ")}"`;
     global.console.log(`Starting Angular tests: ${command}`);
 
     const exec = require("child_process").exec;
-    this.commandLine = exec(command, {
+    /*this.commandLine = */ exec(command, {
       cwd: this.angularProjectRootPath,
-    });
+	}, (error: any, stdout: any, stderr: any) => {
+		if (error) {
+			global.console.error(`exec error: ${error}`);
+			return;
+		}
+		global.console.log(`stdout: ${stdout}`);
+		global.console.log(`stderr: ${stderr}`);
+	});
   }
 }

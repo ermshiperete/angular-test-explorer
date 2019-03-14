@@ -5,11 +5,12 @@ const AngularReporter = require("./angular-reporter").AngularReporter;
 
 module.exports = function(config) {
   config.set({
-    basePath: "/Users/pferraggi/Documents/GitHub/torneo-luefi.web/",
+    basePath: '',
     frameworks: ["jasmine", "@angular-devkit/build-angular"],
     plugins: [
       require("karma-jasmine"),
-      require("karma-phantomjs-launcher"),
+      require('karma-chrome-launcher'),
+      require('karma-jasmine-html-reporter'),
       require("@angular-devkit/build-angular/plugins/karma"),
       { "reporter:AngularReporter": ["type", AngularReporter] },
     ],
@@ -24,6 +25,6 @@ module.exports = function(config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    browsers: ["PhantomJS"],
+    browsers: ['Chrome'],
   });
 };
